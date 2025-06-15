@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Define templates with const assertion for type safety
 const LANDING_PAGE_TEMPLATES = {
   basic: `Basic landing page with header, hero section, features, and footer`,
   modern: `Modern landing page with gradient backgrounds, animated buttons, and card components`,
@@ -20,12 +19,10 @@ export async function POST(request: Request) {
     const { messages, template = "basic" } =
       (await request.json()) as ChatRequest;
 
-    // Initialize the Google Generative AI
     const genAI = new GoogleGenerativeAI(
       "AIzaSyCJxky_q1feJHqAhf4wleHL4lIlB26zM6Y"
     );
 
-    // For text-only input, use the gemini-pro model
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash",
       generationConfig: {
@@ -36,7 +33,6 @@ export async function POST(request: Request) {
       },
     });
 
-    // Enhanced system prompt
     const systemPrompt = `
       You are an expert web developer specializing in creating modern, responsive landing pages.
       Follow these guidelines strictly:
@@ -61,7 +57,6 @@ export async function POST(request: Request) {
       8. Include brief explanations before each code block
     `;
 
-    // Prepare chat history
     const chatHistory = [
       {
         role: "user",
@@ -87,24 +82,17 @@ export async function POST(request: Request) {
       })),
     ];
 
-    // Start chat session
     const chat = model.startChat({
       history: chatHistory,
     });
 
-    // Get the latest user message
     const userMessage = messages[messages.length - 1].content;
 
-    // Send message and await response
     const result = await chat.sendMessage(userMessage);
     const response = await result.response;
     const text = response.text();
 
-    // Post-process the response to ensure proper formatting
-    const processedResponse = text.replace(
-      /```(html|css)/g,
-      "```$1\n" // Ensure newline after code block markers
-    );
+    const processedResponse = text.replace(/```(html|css)/g, "```$1\n");
 
     return NextResponse.json({
       response: processedResponse,

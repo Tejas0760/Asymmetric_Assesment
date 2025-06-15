@@ -70,7 +70,6 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const previewRef = useRef<HTMLIFrameElement>(null);
 
-  // Handle session and redirect
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/sign-in");
@@ -116,14 +115,11 @@ export default function ChatPage() {
     return null;
   }
 
-  // Helper function to get display name
   const getDisplayName = (user?: { name?: string | null }) => {
     if (!user?.name) return "User";
-    // Return first name only (before first space)
     return user.name.trim().split(/\s+/)[0];
   };
 
-  // Helper function to get initials
   const getInitials = (name?: string | null) => {
     if (!name) return "U";
     const parts = name.trim().split(/\s+/);
@@ -187,7 +183,6 @@ export default function ChatPage() {
           <h1 className="text-xl font-semibold">Landing Page Generator</h1>
 
           <div className="flex items-center gap-2">
-            {/* Display full name next to avatar */}
             <span className="text-sm font-medium">
               {getDisplayName(session?.user)}
             </span>
@@ -228,9 +223,7 @@ export default function ChatPage() {
         </div>
       </header>
       <main className="flex-1 flex overflow-hidden">
-        {/* Chat Section */}
         <div className="w-1/2 border-r bg-white flex flex-col relative">
-          {/* Template Selector - Fixed Position */}
           <div className="bg-white border-b p-4">
             <div className="flex items-center gap-4">
               <Select
@@ -377,7 +370,6 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* Preview Section */}
         <div className="w-1/2 bg-white flex flex-col">
           <div className="border-b p-4">
             <h2 className="text-lg font-semibold flex items-center gap-2 p-1">
